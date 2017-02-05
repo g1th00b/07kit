@@ -14,6 +14,7 @@ import com.kit.gui.component.SidebarWidget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -21,12 +22,15 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  */
 public class QuickHopSidebarWidget extends JPanel implements SidebarWidget {
 
+    private static final Map<String, Image> FLAG_IMAGES = new HashMap<>();
     private static final Color F2P_COLOR = new Color(237, 237, 237);
     private static final Color P2P_COLOR = new Color(255, 229, 54);
     private static final int GAME_PORT = 43594;
@@ -157,7 +161,7 @@ public class QuickHopSidebarWidget extends JPanel implements SidebarWidget {
         private WorldWidget(World world, int idx) {
             this.world = world;
 
-            Image worldFlag = Application.FLAG_IMAGES.get(world.getCountry()).getScaledInstance(20, 10, Image.SCALE_SMOOTH);
+            Image worldFlag = FLAG_IMAGES.get(world.getCountry()).getScaledInstance(20, 10, Image.SCALE_SMOOTH);
             Image typeFlag = world.isMembers() ? P2P_ICON : F2P_ICON;
 
             setLayout(new MigLayout("insets 0, gap rel 0"));
@@ -223,5 +227,17 @@ public class QuickHopSidebarWidget extends JPanel implements SidebarWidget {
             return text.substring(0, length - 3) + "...";
         }
         return text;
+    }
+
+    static {
+        final Logger logger = LoggerFactory.getLogger(QuickHopSidebarWidget.class);
+        try {
+            logger.info("Loading country icons.");
+            FLAG_IMAGES.put("Germany", ImageIO.read(Application.class.getResourceAsStream("/flag_DE.png")));
+            FLAG_IMAGES.put("United Kingdom", ImageIO.read(Application.class.getResourceAsStream("/flag_GB.png")));
+            FLAG_IMAGES.put("United States", ImageIO.read(Application.class.getResourceAsStream("/flag_US.png")));
+        } catch (IOException e) {
+            logger.error("Can't load country icons.", e);
+        }
     }
 }

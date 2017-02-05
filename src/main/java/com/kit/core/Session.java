@@ -34,12 +34,7 @@ import java.nio.charset.Charset;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-/**
- * State mechanism for a botting session.
- *
- */
 public final class Session extends MethodContext {
-
     private static Logger logger = Logger.getLogger(Session.class);
     private final Events eventBus = new Events();
     private final CommunityManager communityManager;
@@ -49,14 +44,12 @@ public final class Session extends MethodContext {
     private final AppletLoader loader;
     private State state;
     private long startTime;
-    private boolean render = true;
     private boolean rememberUsername;
     private Property rememberedUsername;
     private Property email;
     private Property apiKey;
     private UserAccount userAccount;
     private Client socketClient;
-    //private IClient client;
 
     public static final String USERNAME_PROPERTY_KEY = "rememberedUsername";
     public static final String EMAIL_PROPERTY_KEY = "email";

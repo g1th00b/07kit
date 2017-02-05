@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.kit.Application;
 import com.kit.api.util.NotificationsUtil;
 import com.kit.game.exception.ClassPreloadException;
+import com.kit.game.exception.ClientOutdatedException;
 import com.kit.game.transform.Extender;
 import com.kit.game.transform.impl.*;
 import com.kit.game.transform.model.ClassDefinition;
@@ -67,7 +68,7 @@ public final class AppletClassLoader extends ClassLoader {
      * @throws ClassPreloadException when a class fails the
      *                               preloading process.
      */
-    public void preload() throws ClassPreloadException {
+    public void preload() throws ClassPreloadException, ClientOutdatedException {
         int revision = 120;
         while (revision < 1000) {
             try {
@@ -88,8 +89,7 @@ public final class AppletClassLoader extends ClassLoader {
         if (hooks.revision != revision) {
             NotificationsUtil.showNotification("Error", "07Kit is currently outdated :(, check twitter for updates!");
             Application.outdated = true;
-            Application.APPLET_VIEW.refresh();
-            return;
+            throw new ClientOutdatedException(hooks.revision, revision);
         }
         Map<String, ClassDefinition> definitions = newHashMap();
         try {

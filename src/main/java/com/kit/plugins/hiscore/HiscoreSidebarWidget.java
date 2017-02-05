@@ -65,7 +65,6 @@ public class HiscoreSidebarWidget extends JPanel implements SidebarWidget {
                 Skill.RUNECRAFTING, Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER};
         for (final Skill s : skills) {
             try {
-                Image skillIcon = Application.SKILL_IMAGE_ICONS.get(s);
                 JPanel skillPanel = new JPanel(new BorderLayout());
                 skillPanel.setBorder(new EmptyBorder(5, 10, 5, 10));
                 skillPanel.getInsets().set(0, 0, 0, 0);
@@ -93,7 +92,7 @@ public class HiscoreSidebarWidget extends JPanel implements SidebarWidget {
                     }
                 });
 
-                JLabel skillIconLabel = new JLabel(new ImageIcon(skillIcon));
+                JLabel skillIconLabel = new JLabel(new ImageIcon(s.getIcon()));
                 skillIconLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 skillPanel.add(skillIconLabel, BorderLayout.WEST);
                 skillIconLabel.setOpaque(false);

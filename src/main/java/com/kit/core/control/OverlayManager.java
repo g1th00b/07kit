@@ -7,6 +7,9 @@ import com.kit.api.event.EventHandler;
 import com.kit.api.event.PaintEvent;
 import com.kit.api.overlay.BoxOverlay;
 import com.kit.core.Session;
+import com.kit.gui.Controller;
+import com.kit.gui.ControllerManager;
+import com.kit.gui.controller.MainController;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -37,6 +40,7 @@ public final class OverlayManager {
 
     @EventHandler
     public void onMouseMove(MouseEvent event) {
+        MainController mainController = ControllerManager.get(MainController.class);
         for (BoxOverlay overlay : boxOverlays) {
             if (!overlay.isFloating())
                 continue;
@@ -50,10 +54,10 @@ public final class OverlayManager {
             if (overlay.isLocked())
                 continue;
 
-            Application.APPLET_VIEW.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            mainController.setCursor(new Cursor(Cursor.MOVE_CURSOR));
             return;
         }
-        Application.APPLET_VIEW.setCursor(Cursor.getDefaultCursor());
+        mainController.setCursor(Cursor.getDefaultCursor());
     }
 
     @EventHandler

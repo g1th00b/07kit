@@ -1,5 +1,10 @@
 package com.kit.api.wrappers;
 
+import com.kit.Application;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +41,7 @@ public enum Skill {
 
     private final String name;
     private final int index;
+    private Image icon;
 
     Skill(String name, int index) {
         this.name = name;
@@ -55,8 +61,19 @@ public enum Skill {
     static {
         for (Skill s : values()) {
             INDEX_MAP.put(s.getIndex(), s);
+            try {
+                if (s.getIndex() > Skill.CONSTRUCTION.getIndex()) {
+                    break;
+                }
+
+                final String iconResource = String.format("/%s.gif", s.name().toLowerCase());
+                s.icon = ImageIO.read(Skill.class.getResourceAsStream(iconResource));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
     public static Skill forIndex(int idx) {
         return INDEX_MAP.get(idx);
     }
@@ -66,4 +83,7 @@ public enum Skill {
         return name().charAt(0) + name().substring(1).toLowerCase();
     }
 
+    public Image getIcon() {
+        return icon;
+    }
 }

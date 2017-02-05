@@ -28,9 +28,7 @@ public class MainView extends JFrame {
     public static final int STANDARD_WIDTH = 1020;
     public static final int STANDARD_HEIGHT = 540;
 
-    private Dimension size;
-
-    private MateTitleBar titleBar;
+    private final AppletView appletView = new AppletView();
     private JPanel displayPanel;
     private boolean hasSidebar = false;
 
@@ -52,7 +50,7 @@ public class MainView extends JFrame {
 
         int height = Integer.parseInt(heightProp.getValue());
 
-        size = new Dimension(width, height);
+        Dimension size = new Dimension(width, height);
         setMinimumSize(size);
         setPreferredSize(size);
         setResizable(true);
@@ -121,7 +119,7 @@ public class MainView extends JFrame {
 
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-        titleBar = new MateTitleBar(this, false);
+        MateTitleBar titleBar = new MateTitleBar(this, false);
         getContentPane().add(titleBar, BorderLayout.NORTH);
 
         displayPanel = new JPanel();
@@ -147,17 +145,17 @@ public class MainView extends JFrame {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Application.APPLET_VIEW.setApplet(Application.SESSION.getAppletLoader().getApplet());
+                appletView.setApplet(Application.SESSION.getAppletLoader().getApplet());
                 Application.SESSION.getAppletLoader().start();
                 while (!Session.get().getPluginManager().isPluginsStarted()) {
                     Thread.sleep(150);
                 }
-                Application.APPLET_VIEW.showApplet();
+                appletView.showApplet();
                 return null;
             }
         };
         worker.execute();
-        displayPanel.add(Application.APPLET_VIEW, BorderLayout.CENTER);
+        displayPanel.add(appletView, BorderLayout.CENTER);
         revalidate();
         repaint();
     }
@@ -199,6 +197,10 @@ public class MainView extends JFrame {
 
     public Dimension getDefaultSize() {
         return new Dimension(STANDARD_WIDTH, STANDARD_HEIGHT);
+    }
+
+    public AppletView getAppletView() {
+        return appletView;
     }
 }
 

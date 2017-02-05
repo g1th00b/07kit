@@ -2,23 +2,13 @@ package com.kit.gui.controller;
 
 import com.kit.Application;
 import com.kit.api.debug.AbstractDebug;
-import com.kit.gui.Controller;
-import com.kit.plugins.debugger.DebugSidebarWidget;
-import com.kit.Application;
-import com.kit.api.debug.AbstractDebug;
 import com.kit.api.debug.impl.WidgetDebug;
 import com.kit.core.Session;
 import com.kit.gui.Controller;
 import com.kit.gui.ControllerManager;
-import com.kit.gui.component.MateCheckBox;
-import com.kit.gui.view.MainView;
-import org.apache.log4j.Logger;
-import com.kit.api.debug.AbstractDebug;
-import com.kit.api.debug.impl.WidgetDebug;
-import com.kit.core.Session;
-import com.kit.gui.Controller;
 import com.kit.gui.view.MainView;
 import com.kit.plugins.debugger.DebugSidebarWidget;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,5 +79,9 @@ public class MainController extends Controller<MainView> {
             view.setPreferredSize(view.getDefaultSize());
             view.setSize(view.getDefaultSize());
         }
+    }
+
+    public void setCursor(Cursor cursor) {
+        getComponent().getAppletView().setCursor(cursor);
     }
 }

@@ -23,7 +23,6 @@ import static java.lang.reflect.Modifier.isStatic;
 
 /**
  * A self-mapping Events.
- *
  */
 public class Events {
 
@@ -50,7 +49,9 @@ public class Events {
         if (annotation != null) {
             EventHandlerBridge bridge = new EventHandlerBridge(object, method);
             if (bridge.validate()) {
-                typedMappings.put(bridge.getType(), bridge);
+                synchronized (typedMappings) {
+                    typedMappings.put(bridge.getType(), bridge);
+                }
             } else {
                 throw new IllegalArgumentException("Invalid EventHandler: " + method.getName());
             }
@@ -93,7 +94,7 @@ public class Events {
 
                 int oldPlane = currentPos >> 28;
                 int oldX = currentPos >> 14 & 255;
-                int oldY =  currentPos & 255;
+                int oldY = currentPos & 255;
 
                 int newX = deltaX + oldX & 255;
                 int newY = deltaY + oldY & 255;
@@ -111,7 +112,7 @@ public class Events {
 
                 int oldPlane = currentPos >> 28;
                 int oldX = currentPos >> 14 & 255;
-                int oldY =  currentPos & 255;
+                int oldY = currentPos & 255;
 
                 int newPlane = deltaPlane + oldPlane & 3;
 
@@ -131,44 +132,44 @@ public class Events {
 
                 int oldPlane = currentPos >> 28;
                 int oldX = currentPos >> 14 & 255;
-                int oldY =  currentPos & 255;
+                int oldY = currentPos & 255;
 
                 int newPlane = deltaPlane + oldPlane & 3;
                 int newX = oldX;
                 int newY = oldY;
 
-                if(direction == 0) {
+                if (direction == 0) {
                     --newX;
                     --newY;
                 }
 
-                if(direction == 1) {
+                if (direction == 1) {
                     --newY;
                 }
 
-                if(direction == 2) {
+                if (direction == 2) {
                     ++newX;
                     --newY;
                 }
 
-                if(direction == 3) {
+                if (direction == 3) {
                     --newX;
                 }
 
-                if(direction == 4) {
+                if (direction == 4) {
                     ++newX;
                 }
 
-                if(direction == 5) {
+                if (direction == 5) {
                     --newX;
                     ++newY;
                 }
 
-                if(direction == 6) {
+                if (direction == 6) {
                     ++newY;
                 }
 
-                if(direction == 7) {
+                if (direction == 7) {
                     ++newX;
                     ++newY;
                 }
@@ -190,7 +191,7 @@ public class Events {
 
                 int oldPlane = currentPos >> 28;
                 int oldX = currentPos >> 14;
-                int oldY =  currentPos & 255;
+                int oldY = currentPos & 255;
 
                 int newPlane = deltaPlane + oldPlane & 3;
                 int newX = deltaX + oldX & 255;
@@ -266,7 +267,9 @@ public class Events {
 
 
     private void fireEvent(Object object) {
-        typedMappings.get(object.getClass()).stream().forEach(bridge -> bridge.handle(object));
+        synchronized (typedMappings) {
+            typedMappings.get(object.getClass()).forEach(bridge -> bridge.handle(object));
+        }
     }
 
     /**
@@ -276,7 +279,9 @@ public class Events {
      */
     public void deregister(Object object) {
         // TODO: Optimize this.
-        typedMappings.values().removeIf(bridge -> bridge.method.getDeclaringClass().equals(object.getClass()));
+        synchronized (typedMappings) {
+            typedMappings.values().removeIf(bridge -> bridge.method.getDeclaringClass().equals(object.getClass()));
+        }
     }
 
     public void submitMouseEvent(MouseEvent e) {
